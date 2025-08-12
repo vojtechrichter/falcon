@@ -1,2 +1,2 @@
 # Falcon
-## Lightweight and blazing fast PHP framework
+Lightweight and blazing-fast PHP framework
