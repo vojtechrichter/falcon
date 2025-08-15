@@ -1,0 +1,33 @@
+{
+    "name": "vojtechrichter/falcon",
+    "description": "Fast and lightweight PHP framework",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Falcon\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "vojtechrichter",
+            "email": "vojta3218@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "squizlabs/php_codesniffer": "^3.13"
+    },
+    "scripts": {
+        "phpstan": "php vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G",
+        "cs": "php vendor/bin/phpcbf --standard=PSR12 src",
+        "lint": [
+            "@phpstan",
+            "@cs"
+        ]
+    },
+  "require": {
+    "ext-pdo": "*",
+    "ext-yaml": "*"
+  }
+}
