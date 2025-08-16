@@ -22,6 +22,7 @@ final class PdoProvider
         if ($databaseConfig['driver'] === 'pgsql') {
             $dsn = "pgsql:host={$databaseConfig['host']};port={$databaseConfig['port']};dbname={$databaseConfig['db']};user={$databaseConfig['username']};password={$databaseConfig['password']}";
         } else if ($databaseConfig['driver'] === 'mysql') {
+            $dsn = "mysql:host={$databaseConfig['host']};port={$databaseConfig['port']};dbname={$databaseConfig['db']}";
         }
 
         return new \PDO($dsn, $databaseConfig['username'], $databaseConfig['password'], [

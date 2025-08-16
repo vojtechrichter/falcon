@@ -21,11 +21,23 @@ final class Profiler
 
     private static function printIterable(iterable $data): void
     {
+        static $depthLevel = 0;
+
         foreach ($data as $idx => $val) {
             if (is_iterable($val)) {
+                $depthLevel++;
+
+                echo '<span style="padding-left: ' . $depthLevel - 1 . 'rem;">' . $idx . '</span>';
+                echo ' (array key)';
+                echo '<br/>';
+
                 self::printIterable($val);
             } else {
-                echo '<span>' . $idx . '&nbsp;&nbsp;=>&nbsp;&nbsp;' . $val . '</span><br/>';
+                if ($depthLevel > 0) {
+                    echo '<span style="padding-left: ' . $depthLevel . 'rem;">' . $idx . '&nbsp;&nbsp;=>&nbsp;&nbsp;' . $val . '</span><br/>';
+                } else {
+                    echo '<span'. '>' . $idx . '&nbsp;&nbsp;=>&nbsp;&nbsp;' . $val . '</span><br/>';
+                }
             }
         }
     }
