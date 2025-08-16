@@ -23,9 +23,16 @@ final class QueryBuilder implements \Stringable
      * @param array<string> $columns
      * @return $this
      */
-    public function select(array $columns): self
+    public function select(array|string $columns): self
     {
-        $this->selectColumns = $columns;
+        $cols = [];
+        if (is_string($columns)) {
+            $cols = explode(',', str_replace(' ', '', $columns));
+        } else if (is_array($columns)) {
+            $cols = $columns;
+        }
+
+        $this->selectColumns = $cols;
 
         return $this;
     }
