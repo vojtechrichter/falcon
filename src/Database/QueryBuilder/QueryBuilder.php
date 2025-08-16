@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Falcon\Database\QueryBuilder;
 
-final class QueryBuilder
+final class QueryBuilder implements \Stringable
 {
     private int $bindingCounter = 0;
     /** @var array<string, string>  */
@@ -37,7 +37,7 @@ final class QueryBuilder
         return $this;
     }
 
-    public function where(string $lExpr, string $rExpr): self
+    public function where(string $lExpr, mixed $rExpr): self
     {
         $this->whereClauses[] = new Where(
             $lExpr,
@@ -79,8 +79,9 @@ final class QueryBuilder
             $concatBoolOp = $firstCondition ? '' : " {$whereClause->compareBoolean} ";
 
             // TODO: dodelat where podminky pro operatory jako < > <=, >= ! LIKE
+
             $conditions[] = match ($whereClause->type) {
-                WhereType::Default => $concatBoolOp . "{$whereClause->column} = {$whereClause->value}",
+                WhereType::Default => $concatBoolOp . "{$this->filterOperators($whereClause->column)} {$this->resolveLExprOperator($whereClause->column)} {$whereClause->value}",
                 WhereType::In => throw new \Exception('To be implemented'),
                 WhereType::Between => throw new \Exception('To be implemented')
             };
@@ -89,6 +90,27 @@ final class QueryBuilder
         }
 
         return implode('', $conditions);
+    }
+
+    private function resolveLExprOperator(string $lexpr): string
+    {
+        $characterArray = mb_str_split($lexpr);
+        foreach ($characterArray as $idx => $char) {
+            if (in_array($char, ['<', '>'])) {
+                if (isset($characterArray[$idx + 1]) && $characterArray[$idx + 1] === '=') {
+                    return $char . '=';
+                }
+
+                return $char;
+            }
+        }
+
+        return '=';
+    }
+
+    private function filterOperators(string $lexpr): string
+    {
+        return implode('', array_filter(mb_str_split($lexpr), fn ($a) => !in_array($a, ['<', '=', '>'])));
     }
 
     private function build(): string
@@ -115,6 +137,16 @@ final class QueryBuilder
         }
 
         return $sql;
+    }
+
+    public function getQuery(): string
+    {
+        return $this->build();
+    }
+
+    public function __toString(): string
+    {
+        return $this->build();
     }
 
     private function createPlaceholder(): string

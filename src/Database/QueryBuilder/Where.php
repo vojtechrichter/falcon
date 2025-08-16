@@ -10,7 +10,7 @@ final readonly class Where
 
     public function __construct(
         public string $column,
-        public string $value,
+        public mixed $value,
         public string $compareBoolean,
         public WhereType $type = WhereType::Default
     ) {
