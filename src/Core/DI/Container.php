@@ -14,7 +14,7 @@ final class Container
         $this->services[$id] = $serviceCallback;
     }
 
-    public function get(string $id): object
+    public function get(string $id): mixed
     {
         if (!isset($this->services[$id])) {
             throw new \RuntimeException(sprintf('Service "%s" is not registered in the container.', $id));

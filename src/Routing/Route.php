@@ -12,8 +12,8 @@ final readonly class Route
      * @param string $mask
      * @param Method|null $method
      * @param \Closure|null $closureHandler
-     * @param string<class-string>|null $className
-     * @param string<callable-string>|null $classMethodName
+     * @param class-string|null $className
+     * @param callable-string|null $classMethodName
      */
     public function __construct(
         public string $mask,

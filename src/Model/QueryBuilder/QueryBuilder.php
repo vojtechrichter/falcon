@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Falcon\Model\QueryBuilder;
 
+use Falcon\Model\PdoProvider;
+
 final class QueryBuilder implements \Stringable
 {
     private int $bindingCounter = 0;
-    /** @var array<string, string>  */
+    /** @var array<string, mixed>  */
     private array $bindings = [];
     /** @var array<string> */
     private array $selectColumns = [];
@@ -20,7 +22,7 @@ final class QueryBuilder implements \Stringable
     private string $table;
 
     /**
-     * @param array<string> $columns
+     * @param array<string>|string $columns
      * @return $this
      */
     public function select(array|string $columns): self
@@ -28,7 +30,7 @@ final class QueryBuilder implements \Stringable
         $cols = [];
         if (is_string($columns)) {
             $cols = explode(',', str_replace(' ', '', $columns));
-        } else if (is_array($columns)) {
+        } else {
             $cols = $columns;
         }
 
@@ -87,6 +89,7 @@ final class QueryBuilder implements \Stringable
 
             // TODO: dodelat where podminky pro operatory jako < > <=, >= ! LIKE
 
+            assert(is_string($whereClause->value) || is_int($whereClause->value));
             $conditions[] = match ($whereClause->type) {
                 WhereType::Default => $concatBoolOp . "{$this->filterOperators($whereClause->column)} {$this->resolveLExprOperator($whereClause->column)} {$whereClause->value}",
                 WhereType::In => throw new \Exception('To be implemented'),
@@ -144,6 +147,23 @@ final class QueryBuilder implements \Stringable
         }
 
         return $sql;
+    }
+
+    private function prepare(): \PDOStatement
+    {
+        $sql = $this->build();
+        $statement = PdoProvider::get()->prepare($sql);
+        if (!$statement) {
+            throw new \RuntimeException('Could not prepare statement.');
+        }
+        $statement->execute($this->bindings);
+
+        return $statement;
+    }
+
+    public function fetchAll(): array // @phpstan-ignore-line
+    {
+        return $this->prepare()->fetchAll();
     }
 
     public function getQuery(): string

@@ -19,13 +19,13 @@ final class PdoProvider
         $databaseConfig = Config::get()[SectionKey::Database->value];
 
         $dsn = '';
-        if ($databaseConfig['driver'] === 'pgsql') {
-            $dsn = "pgsql:host={$databaseConfig['host']};port={$databaseConfig['port']};dbname={$databaseConfig['db']};user={$databaseConfig['username']};password={$databaseConfig['password']}";
-        } else if ($databaseConfig['driver'] === 'mysql') {
-            $dsn = "mysql:host={$databaseConfig['host']};port={$databaseConfig['port']};dbname={$databaseConfig['db']}";
+        if ($databaseConfig['driver'] === 'pgsql') { // @phpstan-ignore-line
+            $dsn = "pgsql:host={$databaseConfig['host']};port={$databaseConfig['port']};dbname={$databaseConfig['db']};user={$databaseConfig['username']};password={$databaseConfig['password']}"; // @phpstan-ignore-line
+        } elseif ($databaseConfig['driver'] === 'mysql') {
+            $dsn = "mysql:host={$databaseConfig['host']};port={$databaseConfig['port']};dbname={$databaseConfig['db']}"; // @phpstan-ignore-line
         }
 
-        return new \PDO($dsn, $databaseConfig['username'], $databaseConfig['password'], [
+        return new \PDO($dsn, $databaseConfig['username'], $databaseConfig['password'], [ // @phpstan-ignore-line
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
             \PDO::ATTR_DRIVER_NAME => $databaseConfig['driver']

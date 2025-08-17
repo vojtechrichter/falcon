@@ -22,7 +22,6 @@ final class Kernel
             // Create container here
 
             // Resolve request -> route
-
         } catch (\Throwable $t) {
             // profiler
         }
@@ -37,12 +36,12 @@ final class Kernel
 
             if ($route->closureHandler !== null) {
                 ($route->closureHandler)();
-            } else if (
+            } elseif (
                 $route->className !== null &&
                 $route->classMethodName !== null
             ) {
                 $handlerClass = new $route->className();
-                call_user_func_array([$handlerClass, $route->classMethodName], []);
+                call_user_func_array([$handlerClass, $route->classMethodName], []); // @phpstan-ignore-line
             }
             echo '<br>';
         }

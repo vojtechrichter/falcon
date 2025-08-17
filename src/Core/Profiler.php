@@ -9,6 +9,7 @@ final class Profiler
     private const string SYMBOL_RESOLVED = '__section_resolved';
     private const int STORAGE_KEY_LENGTH = 1000;
 
+    /** @var array<string, mixed>  */
     private static array $metadataStorage = [];
 
     public static function dump(mixed $data): void
@@ -19,10 +20,19 @@ final class Profiler
         self::renderBufferedStorage($storageKey);
     }
 
+    /**
+     * @param array<mixed> $data
+     * @return void
+     */
     private static function printIterable(iterable $data): void
     {
+        /** @var int $depthLevel */
         static $depthLevel = 0;
 
+        /**
+         * @var int|string $idx
+         * @var mixed $val
+         */
         foreach ($data as $idx => $val) {
             if (is_iterable($val)) {
                 $depthLevel++;
@@ -33,10 +43,11 @@ final class Profiler
 
                 self::printIterable($val);
             } else {
+                assert(is_string($val) || is_int($val));
                 if ($depthLevel > 0) {
                     echo '<span style="padding-left: ' . $depthLevel . 'rem;">' . $idx . '&nbsp;&nbsp;=>&nbsp;&nbsp;' . $val . '</span><br/>';
                 } else {
-                    echo '<span'. '>' . $idx . '&nbsp;&nbsp;=>&nbsp;&nbsp;' . $val . '</span><br/>';
+                    echo '<span' . '>' . $idx . '&nbsp;&nbsp;=>&nbsp;&nbsp;' . $val . '</span><br/>';
                 }
             }
         }

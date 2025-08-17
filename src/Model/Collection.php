@@ -10,8 +10,8 @@ class Collection
 {
     private(set) \PDO $pdo;
 
-    public function __construct(
-    ) {
+    public function __construct()
+    {
     }
 
     public static function fromQueryBuilder(QueryBuilder $queryBuilder): Collection
