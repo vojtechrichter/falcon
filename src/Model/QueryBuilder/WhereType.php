@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Falcon\Database\QueryBuilder;
+namespace Falcon\Model\QueryBuilder;
 
 enum WhereType: int
 {

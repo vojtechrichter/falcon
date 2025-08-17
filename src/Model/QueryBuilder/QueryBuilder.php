@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Falcon\Database\QueryBuilder;
+namespace Falcon\Model\QueryBuilder;
 
 final class QueryBuilder implements \Stringable
 {

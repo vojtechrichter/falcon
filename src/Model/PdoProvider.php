@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Falcon\Database;
+namespace Falcon\Model;
 
 use Falcon\Core\Config\Config;
 use Falcon\Core\Config\SectionKey;

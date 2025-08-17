@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Falcon\Database\QueryBuilder;
+namespace Falcon\Model;
 
-use Kernel\Database\QueryBuilder\QueryBuilder;
+use Falcon\Model\QueryBuilder\QueryBuilder;
 
 class Collection
 {

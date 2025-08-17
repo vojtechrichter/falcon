@@ -28,6 +28,7 @@
     },
   "require": {
     "ext-pdo": "*",
-    "ext-yaml": "*"
+    "ext-yaml": "*",
+        "latte/latte": "^3.0"
   }
 }
